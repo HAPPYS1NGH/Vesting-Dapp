@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import styles from "@/styles/Home.module.css";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Header from "@/components/Header";
@@ -17,11 +18,9 @@ export default function Home() {
       </Head>
       <Header />
       <main className={styles.main}>
-        {!address && (
-          <div className="center">
-            <ConnectButton />
-          </div>
-        )}
+        <section className="center">
+          <Link href="/Register">{!address && <ConnectButton />}</Link>
+        </section>
       </main>
     </>
   );

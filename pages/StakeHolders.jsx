@@ -9,6 +9,8 @@ import {
     usePrepareContractWrite
 } from "wagmi";
 import { abi, contractAddress } from "../contracts/vesting";
+import Holders from '@/components/Holders';
+import HoldersList from '@/components/HoldersList';
 
 function StakeHolders() {
     //Form for Adding StakeHolder
@@ -19,12 +21,12 @@ function StakeHolders() {
     const [organisationAddress, setOrganisationAddress] = useState();
 
     //For storing Holders 
-    const [holders, setHolders] = useState()
+    const [holders, setHolders] = useState("")
     //Reading Form for Holders
     const [organisationAddressRead, setorganisationAddressRead] = useState()
     const [roleRead, setRoleRead] = useState()
 
-
+    //Handling States
     function handleRoleChange(e) {
         setRole(e.target.value);
     }
@@ -41,6 +43,17 @@ function StakeHolders() {
         setOrganisationAddress(e.target.value);
     }
 
+    function handleRoleReadChange(e) {
+        setRoleRead(e.target.value);
+    }
+
+    function handleOrganisationAddressRead(e) {
+        setorganisationAddressRead(e.target.value);
+    }
+
+
+
+
     const { data: stakeHoldersData, isError: stakeHolderError } =
         useContractRead({
             address: contractAddress,
@@ -54,47 +67,86 @@ function StakeHolders() {
         address: contractAddress,
         abi: abi,
         functionName: 'registerOrganisation',
-        args: [name, symbol]
+        args: [role, stakeHolderAddress, timeLock, tokens, organisationAddress]
     })
 
-    const { data, write: register, isLoading: registering } = useContractWrite(config)
+    const { data, write: addHolder, isLoading: registering } = useContractWrite(config)
     const waitForTransaction = useWaitForTransaction({
         hash: data?.hash,
     })
 
-    async function registerOrganisation(e) {
-        await register();
+    function addStakeHolder(e) {
+        addHolder();
         e.preventDefault();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    function readStakeHolders() {
+        if (stakeHolderError) {
+            console.log(stakeHolderError)
+            console.log(stakeHoldersData)
+        }
+        else {
+            setHolders(stakeHoldersData)
+            console.log(stakeHoldersData)
+        }
+    }
+    function readHolders(e) {
+        e.preventDefault();
+        readStakeHolders();
+
+    }
+
+    // useEffect(() => {
+    //     readStakeHolders()
+    // }, [readStakeHolders, stakeHolderError, stakeHoldersData])
+
 
 
 
     return (
         <div>
             <Header />
+            <div className='mx-20 my-10'>
+                <h1 className='text-3xl font-bold mt-10 mb-5'>Register StakeHolders</h1>
+                <form className='flex flex-col space-y-4 mb-10'>
+                    <label className='flex flex-col'>
+                        <span className='mb-1 font-bold'>Role:</span>
+                        <input type="text" value={role} onChange={handleRoleChange} className='border border-gray-400 p-2 rounded-md' />
+                    </label>
+                    <label className='flex flex-col'>
+                        <span className='mb-1 font-bold'>Stake Holder Address:</span>
+                        <input type="text" value={stakeHolderAddress} onChange={handleStakeHolderAddress} className='border border-gray-400 p-2 rounded-md' />
+                    </label>
+                    <label className='flex flex-col'>
+                        <span className='mb-1 font-bold'>Time Lock:</span>
+                        <input type="text" value={timeLock} onChange={handleTimeLock} className='border border-gray-400 p-2 rounded-md' />
+                    </label>
+                    <label className='flex flex-col'>
+                        <span className='mb-1 font-bold'>Tokens:</span>
+                        <input type="text" value={tokens} onChange={handleTokens} className='border border-gray-400 p-2 rounded-md' />
+                    </label>
+                    <label className='flex flex-col'>
+                        <span className='mb-1 font-bold'>Organisation Address:</span>
+                        <input type="text" value={organisationAddress} onChange={handleOrganisationAddress} className='border border-gray-400 p-2 rounded-md' />
+                    </label>
+                    <button type="submit" onClick={addStakeHolder} disabled={waitForTransaction.isLoading || registering} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>{waitForTransaction.isLoading ? "Transacting..... " : (registering ? "Check Wallet" : "Register")}</button>
+                </form>
+            </div>
+            <h1 className='text-3xl font-bold mt-10 mb-5'>Register StakeHolders</h1>
             <form className='flex flex-col space-y-4 mb-10'>
                 <label className='flex flex-col'>
-                    <span className='mb-1 font-bold'>Role:</span>
-                    <input type="text" value={role} onChange={handleRoleChange} className='border border-gray-400 p-2 rounded-md' />
+                    <span className='mb-1 font-bold'>Role</span>
+                    <input type="text" value={roleRead} onChange={handleRoleReadChange} className='border border-gray-400 p-2 rounded-md' />
                 </label>
                 <label className='flex flex-col'>
-                    <span className='mb-1 font-bold'>Stake Holder Address:</span>
-                    <input type="text" value={stakeHolderAddress} onChange={handleStakeHolderAddress} className='border border-gray-400 p-2 rounded-md' />
+                    <span className='mb-1 font-bold'>Organisation Address:</span>
+                    <input type="text" value={organisationAddressRead} onChange={handleOrganisationAddressRead} className='border border-gray-400 p-2 rounded-md' />
                 </label>
-                <label className='flex flex-col'>
-                    <span className='mb-1 font-bold'>Time Lock:</span>
-                    <input type="text" value={timeLock} onChange={handleTimeLock} className='border border-gray-400 p-2 rounded-md' />
-                </label>
-                <label className='flex flex-col'>
-                    <span className='mb-1 font-bold'>Tokens:</span>
-                    <input type="text" value={tokens} onChange={handleTokens} className='border border-gray-400 p-2 rounded-md' />
-                </label>
-                <label className='flex flex-col'>
-                    <span className='mb-1 font-bold'>Tokens:</span>
-                    <input type="text" value={organisationAddress} onChange={handleOrganisationAddress} className='border border-gray-400 p-2 rounded-md' />
-                </label>
-                <button type="submit" onClick={addStakeHolder} disabled={!registerOrganisation || waitForTransaction.isLoading || registering} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>{waitForTransaction.isLoading ? "Transacting..... " : (registering ? "Check Wallet" : "Register")}</button>
+                <button type="submit" onClick={readHolders} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>Get</button>
             </form>
+            {holders &&
+                <HoldersList holders={holders} />
+            }
         </div>
     )
 }
