@@ -20,6 +20,9 @@ function StakeHolders() {
     const [tokens, setTokens] = useState();
     const [organisationAddress, setOrganisationAddress] = useState();
 
+    //Special
+    // const [shouldReinitialize, setShouldReinitialize] = useState(false);
+
     //For storing Holders 
     const [holders, setHolders] = useState("")
     //Reading Form for Holders
@@ -53,7 +56,6 @@ function StakeHolders() {
 
 
 
-
     const { data: stakeHoldersData, isError: stakeHolderError } =
         useContractRead({
             address: contractAddress,
@@ -66,18 +68,23 @@ function StakeHolders() {
     const { config } = usePrepareContractWrite({
         address: contractAddress,
         abi: abi,
-        functionName: 'registerOrganisation',
+        functionName: 'addStakeHolders',
         args: [role, stakeHolderAddress, timeLock, tokens, organisationAddress]
     })
 
-    const { data, write: addHolder, isLoading: registering } = useContractWrite(config)
+
+    const { data, isLoading: registering, write } = useContractWrite(config)
     const waitForTransaction = useWaitForTransaction({
         hash: data?.hash,
     })
 
     function addStakeHolder(e) {
-        addHolder();
         e.preventDefault();
+        setShouldReinitialize(true);
+
+        console.log("Organisation Address" + organisationAddress)
+        write();
+        setShouldReinitialize(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     function readStakeHolders() {
@@ -95,7 +102,9 @@ function StakeHolders() {
         readStakeHolders();
 
     }
-
+    // useEffect(() => {
+    //     console.log("reinitialising")
+    // }, [shouldReinitialize, organisationAddress])
     // useEffect(() => {
     //     readStakeHolders()
     // }, [readStakeHolders, stakeHolderError, stakeHoldersData])
