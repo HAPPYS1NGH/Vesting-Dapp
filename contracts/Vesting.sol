@@ -163,7 +163,7 @@ contract Vesting {
         } else return new stakeHolder[](0);
     }
 
-    //Add for TimeLock
+    //Add for TimeLock also every one losing tokens check thats
     function mintTokens(
         address _organisationAddress,
         UserRole _userRole,

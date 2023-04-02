@@ -28,7 +28,7 @@ function Holders(props) {
                 <span className="font-semibold">Address:</span> {props.o[1]}
             </div>
             <div className="mb-2 text-sm">
-                <span className="font-semibold">Whitelisted:</span> {props.o[4]}
+                <span className="font-semibold">Whitelisted:</span> {props.o[4] ? "Yes" : "No"}
             </div>
             <div className="mb-2 text-sm">
                 <span className="font-semibold">Timelock:</span> {timeLockString}

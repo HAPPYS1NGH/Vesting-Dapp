@@ -11,6 +11,7 @@ import {
   useProvider
 } from "wagmi";
 import { abi, contractAddress } from "../contracts/vesting";
+import WhiteListedComponent from '@/components/WhiteListedComponent';
 
 function WhiteList() {
   /////
@@ -55,22 +56,27 @@ function WhiteList() {
       console.log(whiteListedAccounts)
     }
   }
-  // async function getWhiteListedAccounts(e) {
-  //   e.preventDefault();
-  //   readWhitelist();
-  //   console.log(await provider.getCode(contractAddress))
-  // }
+  async function getWhiteListedAccounts(e) {
+    e.preventDefault();
+    readWhitelist();
+  }
 
 
   ////////
-  async function getWhiteListedAccounts(e) {
-    e.preventDefault();
+  // async function getWhiteListedAccounts(e) {
+  //   e.preventDefault();
 
-    // console.log(signer)
-    const vesting = new ethers.Contract(contractAddress, abi, provider);
-    let acc = await vesting.getWhiteList(organisationAddressRead);
-    console.log("Got it" + acc);
-  }
+  //   // console.log(signer)
+  //   const vesting = new ethers.Contract(contractAddress, abi, provider);
+  //   try {
+  //     let acc = await vesting.getWhiteList(organisationAddressRead);
+  //     setwhiteListedAccounts(acc)
+  //     console.log("Got it" + acc);
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+
+  // }
   ///////
 
   //whiteListing
@@ -129,7 +135,8 @@ function WhiteList() {
           </div>
           <button type='submit' onClick={getWhiteListedAccounts} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>Get WhiteListed Accounts</button>
         </form>
-        {whiteListedAccount}
+
+        {whiteListedAccount && < WhiteListedComponent accounts={whiteListedAccount} />}
 
       </div>
     </div >

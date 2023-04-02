@@ -157,7 +157,7 @@ function StakeHolders() {
                 <HoldersList holders={holders} />
             } */}
             <div className='mx-20 my-10  bg-slate-300  px-4 py-2 rounded-lg shadow-md hover:shadow-lg overflow-hidden '>
-                <h1 className='text-3xl font-bold mt-10 mb-5'>Register Stakeholders</h1>
+                <h1 className='text-3xl font-bold mt-10 mb-5'>Get Stakeholders</h1>
                 <form className='flex flex-col space-y-4 mb-10'>
                     <div className='flex flex-col'>
                         <label htmlFor='role' className='mb-1 font-bold'>Role</label>
