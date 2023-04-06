@@ -101,7 +101,9 @@ function Register() {
           </form>
         </div>
         <h1 className='text-3xl font-bold mb-5'>Organisations</h1>
-        <OrganisationsList organisations={Organisations} />
+        {Organisations &&
+          <OrganisationsList organisations={Organisations} />
+        }
       </main>
     </div>
 

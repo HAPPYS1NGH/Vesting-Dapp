@@ -81,10 +81,14 @@ function StakeHolders() {
     function addStakeHolder(e) {
         e.preventDefault();
         setShouldReinitialize(true);
+        try {
+            console.log("Organisation Address" + organisationAddress)
+            write();
+            setShouldReinitialize(false);
 
-        console.log("Organisation Address" + organisationAddress)
-        write();
-        setShouldReinitialize(false);
+        } catch (error) {
+            console.log("You are not the Owner")
+        }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     function readStakeHolders() {

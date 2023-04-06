@@ -98,10 +98,15 @@ function WhiteList() {
 
   function whiteListAccounts(e) {
     e.preventDefault();
-    console.log("Status" + status)
-    console.log("Organisation" + organisationAddress)
-    console.log("Role" + role)
-    write();
+    try {
+      console.log("Status" + status)
+      console.log("Organisation" + organisationAddress)
+      console.log("Role" + role)
+      write();
+    } catch (error) {
+      console.log("Please fill details or else You are not Owner ");
+    }
+
   }
 
   return (

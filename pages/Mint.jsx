@@ -91,11 +91,18 @@ function Mint() {
     function mintTokens(e) {
         e.preventDefault();
         setShouldReinitialize(true);
-        console.log("Status" + status)
-        console.log("Organisation" + organisationAddress)
-        console.log("Role" + role)
-        write();
-        setShouldReinitialize(false);
+        try {
+
+            console.log("Status" + status)
+            console.log("Organisation" + organisationAddress)
+            console.log("Role" + role)
+            write();
+        } catch (error) {
+            console.log("Fill all States and you are not Owner")
+        }
+        finally {
+            setShouldReinitialize(false);
+        }
     }
 
     useEffect(() => {
