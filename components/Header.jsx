@@ -19,7 +19,7 @@ function Header() {
     <nav className="bg-gray-800 px-4 py-4">
       <div className="mx-10 flex justify-between items-center">
         <div className="flex items-center space-x-4">
-          <Link href="/Register" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">
+          <Link href="/" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-base font-medium">
             Register Organisation
 
           </Link>
