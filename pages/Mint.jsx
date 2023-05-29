@@ -1,6 +1,5 @@
-import Header from '@/components/Header'
 import React from 'react'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ethers } from 'ethers';
 import {
     useAccount,
@@ -14,9 +13,12 @@ import { abi, contractAddress } from "../contracts/vesting";
 import HoldersList from '@/components/HoldersList';
 import MintList from '@/components/MintList';
 
+import WalletConnected from '@/components/contexts/WalletConnected';
+import ConnectTheWallet from '@/components/ConnectTheWallet';
+
 function Mint() {
     const [shouldReinitialize, setShouldReinitialize] = useState(false);
-
+    const accountConnection = useContext(WalletConnected);
 
     const [role, setRole] = useState();
     const [stakeHolderAddress, setStakeHolderAddress] = useState();
@@ -111,7 +113,6 @@ function Mint() {
 
     return (
         <div>
-            <Header />
 
             <div className='mx-20 my-10 bg-slate-300  px-4 py-2 rounded-lg shadow-md hover:shadow-lg overflow-hidden'>
                 <h1 className='text-3xl font-bold mt-10 mb-5'>Mint Tokens</h1>
@@ -154,6 +155,7 @@ function Mint() {
                 }
 
             </div>
+
         </div>
     )
 }

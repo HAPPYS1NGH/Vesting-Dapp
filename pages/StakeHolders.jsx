@@ -1,5 +1,4 @@
-import Header from '@/components/Header'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import React from 'react'
 import {
     useAccount,
@@ -11,9 +10,12 @@ import {
 import { abi, contractAddress } from "../contracts/vesting";
 import Holders from '@/components/Holders';
 import HoldersList from '@/components/HoldersList';
+import WalletConnected from '@/components/contexts/WalletConnected';
+import ConnectTheWallet from '@/components/ConnectTheWallet';
 
 function StakeHolders() {
     //Form for Adding StakeHolder
+    const accountConnection = useContext(WalletConnected);
     const [role, setRole] = useState();
     const [stakeHolderAddress, setStakeHolderAddress] = useState();
     const [timeLock, setTimeLock] = useState()
@@ -118,7 +120,7 @@ function StakeHolders() {
 
     return (
         <div>
-            <Header />
+
             <div className='mx-20 my-10 bg-slate-300  px-4 py-2 rounded-lg shadow-md hover:shadow-lg overflow-hidden'>
                 <h1 className='text-3xl font-bold mt-10 mb-5'>Register StakeHolders</h1>
                 <form className='flex flex-col space-y-4 mb-10'>
