@@ -9,6 +9,7 @@ import { sepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";
+import ConnectTheWallet from "@/components/ConnectTheWallet";
 const { chains, provider } = configureChains([sepolia], [publicProvider()]);
 
 const { connectors } = getDefaultWallets({
@@ -34,7 +35,11 @@ export default function App({ Component, pageProps }) {
       <RainbowKitProvider chains={chains}>
         <WalletConnected.Provider value={isWalletConnected}>
           <Header />
-          <Component {...pageProps} />
+          {isWalletConnected ? (
+            <Component {...pageProps} />
+          ) : (
+            <ConnectTheWallet />
+          )}
         </WalletConnected.Provider>
       </RainbowKitProvider>
     </WagmiConfig>
