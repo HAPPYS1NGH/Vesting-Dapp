@@ -1,25 +1,15 @@
 import React from 'react'
-import { useState, useContext } from "react";
-import WalletConnected from '@/components/contexts/WalletConnected';
-import { ethers } from 'ethers';
+import { useState } from "react";
 import {
-  useAccount,
   useContractRead,
   useContractWrite,
   useWaitForTransaction,
   usePrepareContractWrite,
-  useProvider
 } from "wagmi";
 import { abi, contractAddress } from "../contracts/vesting";
 import WhiteListedComponent from '@/components/WhiteListedComponent';
-import ConnectTheWallet from '@/components/ConnectTheWallet';
 
 function WhiteList() {
-  const accountConnection = useContext(WalletConnected);
-  /////
-  // const provider = useProvider()
-  // const signer = useAccount();
-  /////
   const [role, setRole] = useState();
   const [organisationAddress, setOrganisationAddress] = useState();
 
@@ -63,35 +53,12 @@ function WhiteList() {
     readWhitelist();
   }
 
-
-  ////////
-  // async function getWhiteListedAccounts(e) {
-  //   e.preventDefault();
-
-  //   // console.log(signer)
-  //   const vesting = new ethers.Contract(contractAddress, abi, provider);
-  //   try {
-  //     let acc = await vesting.getWhiteList(organisationAddressRead);
-  //     setwhiteListedAccounts(acc)
-  //     console.log("Got it" + acc);
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-
-  // }
-  ///////
-
-  //whiteListing
-  // console.log("----------Loading ------------");
   const { config, status } = usePrepareContractWrite({
     address: contractAddress,
     abi: abi,
     functionName: 'whitelist',
     args: [role, organisationAddress]
   })
-
-  // console.log("----------Status ------------" + status);
-
 
   const { data, isLoading: registering, write } = useContractWrite(config)
   const waitForTransaction = useWaitForTransaction({
@@ -113,42 +80,35 @@ function WhiteList() {
 
   return (
     <div>
-
-      <>
-        <main className='mx-20 my-10'>
-          <div className='rounded-lg shadow-md hover:shadow-lg overflow-hidden bg-slate-300 text-black px-4 py-2 mb-20'>
-            <h1 className='text-3xl font-bold mt-10 mb-5'>WhiteList StakeHolders</h1>
-            <form className='flex flex-col space-y-4 mb-10'>
-              <label className='flex flex-col'>
-                <span className='mb-1 font-bold'>StakeHolders Role:</span>
-                <input type="text" value={role} onChange={handleRoleChange} className='border border-gray-400 p-2 rounded-md' />
-              </label>
-              <label className='flex flex-col'>
-                <span className='mb-1 font-bold'>Organization Address:</span>
-                <input type="text" value={organisationAddress} onChange={handleOrganisationAddress} className='border border-gray-400 p-2 rounded-md' />
-              </label>
-              <button type="submit" onClick={whiteListAccounts} disabled={waitForTransaction.isLoading || registering} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>{waitForTransaction.isLoading ? "Transacting..... " : (registering ? "Check Wallet" : "Register")}</button>
-            </form>
-          </div>
-
-
-
-        </main>
-        <div className='mx-20 my-10  bg-slate-300  px-4 py-2 rounded-lg shadow-md hover:shadow-lg overflow-hidden '>
-          <h1 className='text-3xl font-bold mt-10 mb-5'>White Listed Accounts</h1>
+      <main className='mx-20 my-10'>
+        <div className='rounded-lg shadow-md hover:shadow-lg overflow-hidden bg-slate-300 text-black px-4 py-2 mb-20'>
+          <h1 className='text-3xl font-bold mt-10 mb-5'>WhiteList StakeHolders</h1>
           <form className='flex flex-col space-y-4 mb-10'>
-            <div className='flex flex-col'>
-              <label htmlFor='organisationAddress' className='mb-1 font-bold'>Organisation Address:</label>
-              <input type='text' id='organisationAddress' value={organisationAddressRead} onChange={handleOrganisationAddressRead} className='border border-gray-400 p-2 rounded-md' />
-            </div>
-            <button type='submit' onClick={getWhiteListedAccounts} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>Get WhiteListed Accounts</button>
+            <label className='flex flex-col'>
+              <span className='mb-1 font-bold'>StakeHolders Role:</span>
+              <input type="text" value={role} onChange={handleRoleChange} className='border border-gray-400 p-2 rounded-md' />
+            </label>
+            <label className='flex flex-col'>
+              <span className='mb-1 font-bold'>Organization Address:</span>
+              <input type="text" value={organisationAddress} onChange={handleOrganisationAddress} className='border border-gray-400 p-2 rounded-md' />
+            </label>
+            <button type="submit" onClick={whiteListAccounts} disabled={waitForTransaction.isLoading || registering} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>{waitForTransaction.isLoading ? "Transacting..... " : (registering ? "Check Wallet" : "Register")}</button>
           </form>
-
-          {whiteListedAccount && < WhiteListedComponent accounts={whiteListedAccount} />}
-
         </div>
-      </>
+      </main>
+      <div className='mx-20 my-10  bg-slate-300  px-4 py-2 rounded-lg shadow-md hover:shadow-lg overflow-hidden '>
+        <h1 className='text-3xl font-bold mt-10 mb-5'>White Listed Accounts</h1>
+        <form className='flex flex-col space-y-4 mb-10'>
+          <div className='flex flex-col'>
+            <label htmlFor='organisationAddress' className='mb-1 font-bold'>Organisation Address:</label>
+            <input type='text' id='organisationAddress' value={organisationAddressRead} onChange={handleOrganisationAddressRead} className='border border-gray-400 p-2 rounded-md' />
+          </div>
+          <button type='submit' onClick={getWhiteListedAccounts} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>Get WhiteListed Accounts</button>
+        </form>
 
+        {whiteListedAccount && < WhiteListedComponent accounts={whiteListedAccount} />}
+
+      </div>
     </div >
   )
 }

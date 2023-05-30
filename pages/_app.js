@@ -5,7 +5,6 @@ import WalletConnected from "@/components/contexts/WalletConnected";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, useAccount, WagmiConfig } from "wagmi";
 import { sepolia } from "wagmi/chains";
-// import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from "wagmi/providers/public";
 import { useEffect, useState } from "react";
 import Header from "@/components/Header";

@@ -1,21 +1,15 @@
 import { useState, useEffect, useContext } from "react";
 import React from 'react'
 import {
-    useAccount,
     useContractRead,
     useContractWrite,
     useWaitForTransaction,
     usePrepareContractWrite
 } from "wagmi";
 import { abi, contractAddress } from "../contracts/vesting";
-import Holders from '@/components/Holders';
 import HoldersList from '@/components/HoldersList';
-import WalletConnected from '@/components/contexts/WalletConnected';
-import ConnectTheWallet from '@/components/ConnectTheWallet';
 
 function StakeHolders() {
-    //Form for Adding StakeHolder
-    const accountConnection = useContext(WalletConnected);
     const [role, setRole] = useState();
     const [stakeHolderAddress, setStakeHolderAddress] = useState();
     const [timeLock, setTimeLock] = useState()
@@ -120,7 +114,6 @@ function StakeHolders() {
 
     return (
         <div>
-
             <div className='mx-20 my-10 bg-slate-300  px-4 py-2 rounded-lg shadow-md hover:shadow-lg overflow-hidden'>
                 <h1 className='text-3xl font-bold mt-10 mb-5'>Register StakeHolders</h1>
                 <form className='flex flex-col space-y-4 mb-10'>
@@ -147,21 +140,6 @@ function StakeHolders() {
                     <button type="submit" onClick={addStakeHolder} disabled={waitForTransaction.isLoading || registering} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>{waitForTransaction.isLoading ? "Transacting..... " : (registering ? "Check Wallet" : "Register")}</button>
                 </form>
             </div>
-            {/* <h1 className='text-3xl font-bold mt-10 mb-5'>Register StakeHolders</h1>
-            <form className='flex flex-col space-y-4 mb-10'>
-                <label className='flex flex-col'>
-                    <span className='mb-1 font-bold'>Role</span>
-                    <input type="text" value={roleRead} onChange={handleRoleReadChange} className='border border-gray-400 p-2 rounded-md' />
-                </label>
-                <label className='flex flex-col'>
-                    <span className='mb-1 font-bold'>Organisation Address:</span>
-                    <input type="text" value={organisationAddressRead} onChange={handleOrganisationAddressRead} className='border border-gray-400 p-2 rounded-md' />
-                </label>
-                <button type="submit" onClick={readHolders} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>Get</button>
-            </form>
-            {holders &&
-                <HoldersList holders={holders} />
-            } */}
             <div className='mx-20 my-10  bg-slate-300  px-4 py-2 rounded-lg shadow-md hover:shadow-lg overflow-hidden '>
                 <h1 className='text-3xl font-bold mt-10 mb-5'>Get Stakeholders</h1>
                 <form className='flex flex-col space-y-4 mb-10'>

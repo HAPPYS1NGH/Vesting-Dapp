@@ -1,24 +1,16 @@
-import React from 'react'
 import { useState, useEffect, useContext } from "react";
-import { ethers } from 'ethers';
 import {
-    useAccount,
     useContractRead,
     useContractWrite,
     useWaitForTransaction,
-    usePrepareContractWrite,
-    useProvider
+    usePrepareContractWrite
 } from "wagmi";
 import { abi, contractAddress } from "../contracts/vesting";
-import HoldersList from '@/components/HoldersList';
 import MintList from '@/components/MintList';
 
-import WalletConnected from '@/components/contexts/WalletConnected';
-import ConnectTheWallet from '@/components/ConnectTheWallet';
 
 function Mint() {
     const [shouldReinitialize, setShouldReinitialize] = useState(false);
-    const accountConnection = useContext(WalletConnected);
 
     const [role, setRole] = useState();
     const [stakeHolderAddress, setStakeHolderAddress] = useState();
