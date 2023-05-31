@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import React from 'react'
+import { useState, useEffect } from "react";
 import {
     useContractRead,
     useContractWrite,
@@ -8,12 +7,9 @@ import {
 } from "wagmi";
 import { abi, contractAddress } from "../contracts/vesting";
 import OrganisationsList from '@/components/OrganisationList';
-
 function Register() {
-    // const [symbol, setSymbol] = useState(null);
-    const formName = useRef(null);
-    const formSymbol = useRef(null);
-
+    const [name, setName] = useState("");
+    const [symbol, setSymbol] = useState("");
     const [Organisations, setOrganisations] = useState([]);
     //Fetching Organisation
     const { data: organisationsData, isError: organisationsError } =
@@ -23,49 +19,34 @@ function Register() {
             functionName: "getOrganisations",
             watch: true
         });
-    console.log("Hello");
-    const { config, isFetching: prepareData } = usePrepareContractWrite({
+    const { config } = usePrepareContractWrite({
         address: contractAddress,
         abi: abi,
         functionName: 'registerOrganisation',
-        args: [formName.current?.value, formSymbol.current?.value]
+        args: [name, symbol]
     })
-
-    console.log(prepareData);
-    console.log("Bye");
-
     const { data, write: register, isLoading: registering } = useContractWrite(config)
     const waitForTransaction = useWaitForTransaction({
         hash: data?.hash,
     })
-
     async function registerOrganisation(e) {
-        console.log(formName.current.value)
-        console.log(formSymbol.current.value)
-        e.preventDefault();
         register();
+        e.preventDefault();
     }
-
-    // function handleOrgNameChange(e) {
-    //   formName(e.target.value)
-    // }
-
-    // function handleOrgSymbolChange(e) {
-    //   setSymbol(e.target.value);
-    // }
+    function handleOrgNameChange(e) {
+        setName(e.target.value)
+    }
+    function handleOrgSymbolChange(e) {
+        setSymbol(e.target.value);
+    }
     useEffect(() => {
-
         if (organisationsError) {
             console.log(organisationsError)
         }
         else {
-            console.log(organisationsData)
             setOrganisations(organisationsData)
         }
     }, [organisationsData, organisationsError])
-
-
-
     return (
         <div>
             <main className='mx-20 my-10'>
@@ -74,11 +55,11 @@ function Register() {
                     <form className='flex flex-col space-y-4 mb-10'>
                         <label className='flex flex-col'>
                             <span className='mb-1 font-bold'>Organization Name:</span>
-                            <input type="text" ref={formName} className='border border-gray-400 p-2 rounded-md' />
+                            <input type="text" value={name} onChange={handleOrgNameChange} className='border border-gray-400 p-2 rounded-md' />
                         </label>
                         <label className='flex flex-col'>
                             <span className='mb-1 font-bold'>Organization Symbol:</span>
-                            <input type="text" ref={formSymbol} className='border border-gray-400 p-2 rounded-md' />
+                            <input type="text" value={symbol} onChange={handleOrgSymbolChange} className='border border-gray-400 p-2 rounded-md' />
                         </label>
                         <button type="submit" onClick={registerOrganisation} disabled={!registerOrganisation || waitForTransaction.isLoading || registering} className='bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md'>{waitForTransaction.isLoading ? "Transacting..... " : (registering ? "Check Wallet" : "Register")}</button>
                     </form>
@@ -88,9 +69,7 @@ function Register() {
                     <OrganisationsList organisations={Organisations} />
                 }
             </main>
-
         </div>
     )
 }
-
 export default Register
